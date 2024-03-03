@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    
+    <title>User Profile</title>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Book store</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/index">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mybooks">My Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <div class="container">
+            <main>
+                <div class="profile">
+                    <div class="profile-info">
+                        <h2>Welcome <%= user.username %></h2>
+                        <p>Email: <%= user.email %></p>
+                        <p>Role: <%= user.role %></p>
+                        <a href="/logout" class="btn btn-primary">Logout</a>
+                        <button id="updateBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">Update</button>
+                        <a href="/subscribe" class="btn btn-primary">Subscribe</a>
+                    </div>
+                  
+                </div>
+            </main>
+            </div>
+    </section>
+    
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Update User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm" method="post" action="/updateUser">
+                        <div class="form-group">
+                            <label for="username">Update Username</label>
+                            <input type="text" class="form-control" id="username" value="<%= user.username %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Update Email</label>
+                            <input type="email" class="form-control" id="email" value="<%= user.email %>">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("saveChangesBtn").addEventListener("click", function () {
+                var updatedUsername = document.getElementById("username").value;
+                var updatedEmail = document.getElementById("email").value;
+                axios.post("/update", {
+                    username: updatedUsername,
+                    email: updatedEmail
+                })
+                .then(function (response) {
+                    console.log(response.data);
+                    $('#updateModal').modal('hide');
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
